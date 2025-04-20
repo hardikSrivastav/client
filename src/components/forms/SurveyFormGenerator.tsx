@@ -119,7 +119,11 @@ export function SurveyFormGenerator({ surveyId, initialSurvey }: SurveyFormGener
         surveyId: initialSurvey.id,
         title: initialSurvey.title || "Survey Form",
         description: initialSurvey.description || "",
+<<<<<<< HEAD
         questions: initialSurvey.questions || []
+=======
+        questions: []
+>>>>>>> 9774442 (Initial commit from Create Next App)
       }
     }
     

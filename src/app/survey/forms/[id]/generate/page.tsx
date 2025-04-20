@@ -37,6 +37,7 @@ export default function GenerateFormPage() {
   useEffect(() => {
     const fetchSurvey = async () => {
       try {
+<<<<<<< HEAD
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/survey/mongo/surveys/${surveyId}`)
         
         if (!response.ok) {
@@ -56,6 +57,40 @@ export default function GenerateFormPage() {
 
         console.log("API survey:", apiSurvey)
         
+=======
+        // First fetch the survey data
+        const surveyResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/survey/mongo/surveys/${surveyId}`)
+        
+        if (!surveyResponse.ok) {
+          const errorData = await surveyResponse.json().catch(() => null)
+          console.error("Error response:", {
+            status: surveyResponse.status,
+            statusText: surveyResponse.statusText,
+            data: errorData
+          })
+          throw new Error(`Failed to fetch survey: ${surveyResponse.status} ${surveyResponse.statusText}`)
+        }
+        
+        const surveyData = await surveyResponse.json()
+        console.log("Received survey data:", surveyData)
+        
+        const apiSurvey: ApiSurvey = surveyData.data
+        console.log("API survey:", apiSurvey)
+        
+        // Try to fetch existing form data if it exists
+        let existingForm = null
+        try {
+          const formResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/survey/mongo/forms/${surveyId}`)
+          if (formResponse.ok) {
+            const formData = await formResponse.json()
+            existingForm = formData.data
+            console.log("Found existing form:", existingForm)
+          }
+        } catch (err) {
+          console.log("No existing form found or error fetching form:", err)
+        }
+        
+>>>>>>> 9774442 (Initial commit from Create Next App)
         // Convert API survey to component survey format
         const convertedSurvey: Survey = {
           id: apiSurvey.id,
@@ -64,13 +99,21 @@ export default function GenerateFormPage() {
           metrics: apiSurvey.metrics?.map(m => ({
             id: m.id,
             name: m.name,
+<<<<<<< HEAD
             type: m.type as MetricType, // Cast string to MetricType
+=======
+            type: m.type as MetricType,
+>>>>>>> 9774442 (Initial commit from Create Next App)
             description: m.description || "",
             weight: m.weight,
             options: m.options
           })),
           // If we found an existing form, include its questions
+<<<<<<< HEAD
           questions: apiSurvey.questions || []
+=======
+          questions: existingForm?.questions || []
+>>>>>>> 9774442 (Initial commit from Create Next App)
         }
         
         setSurvey(convertedSurvey)
